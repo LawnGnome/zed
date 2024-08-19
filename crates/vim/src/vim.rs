@@ -113,7 +113,8 @@ pub fn init(cx: &mut AppContext) {
         });
 
         // todo! SearchSubmit
-    });
+    })
+    .detach();
 
     // Any time settings change, update vim mode to match. The Vim struct
     // will be initialized as disabled by default, so we filter its commands
@@ -143,12 +144,16 @@ pub fn init(cx: &mut AppContext) {
 }
 
 fn register(editor: &mut Editor, cx: &mut ViewContext<Editor>) {
+    dbg!("hello!");
     if !editor.use_modal_editing() {
         return;
     }
+    dbg!("hello!");
 
     let vim = Vim::new(cx);
-    vim.update(cx, |_, cx| {
+    let editor_id = cx.entity_id();
+    Vim::globals(cx).instances.insert(editor_id, vim.clone());
+    vim.update(cx, |vim, cx| {
         let listener = cx.listener(Vim::observe_keystrokes);
         cx.observe_keystrokes(listener).detach();
         editor.register_action(
@@ -177,6 +182,12 @@ fn register(editor: &mut Editor, cx: &mut ViewContext<Editor>) {
         object::register(editor, cx);
         visual::register(editor, cx);
         change_list::register(editor, cx);
+
+        dbg!("wu");
+        cx.defer(|vim, cx| {
+            dbg!("wa");
+            vim.activate_editor(cx);
+        })
     })
 }
 
@@ -561,6 +572,7 @@ impl Vim {
         let Some(editor) = self.editor() else {
             return;
         };
+        dbg!("Activatgin!");
         let editor = editor.read(cx);
         let editor_mode = editor.mode();
         let newest_selection_empty = editor.selections.newest::<usize>(cx).is_empty();
@@ -960,7 +972,9 @@ impl Vim {
     }
 
     fn sync_vim_settings(&mut self, cx: &mut ViewContext<Self>) {
+        dbg!("sync");
         self.update_editor(cx, |vim, editor, cx| {
+            dbg!("for real");
             editor.set_cursor_shape(vim.cursor_shape(), cx);
             editor.set_clip_at_line_ends(vim.clip_at_line_ends(), cx);
             editor.set_collapse_matches(true);

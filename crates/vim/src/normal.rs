@@ -66,20 +66,44 @@ actions!(
 );
 
 pub(crate) fn register(editor: &mut Editor, cx: &mut ViewContext<Vim>) {
-    editor.register_action(cx.listener(Vim::insert_after));
-    editor.register_action(cx.listener(Vim::insert_before));
-    editor.register_action(cx.listener(Vim::insert_first_non_whitespace));
-    editor.register_action(cx.listener(Vim::insert_end_of_line));
-    editor.register_action(cx.listener(Vim::insert_line_above));
-    editor.register_action(cx.listener(Vim::insert_line_below));
-    editor.register_action(cx.listener(Vim::insert_at_previous));
-    editor.register_action(cx.listener(Vim::change_case));
-    editor.register_action(cx.listener(Vim::convert_to_upper_case));
-    editor.register_action(cx.listener(Vim::convert_to_lower_case));
-    editor.register_action(cx.listener(Vim::yank_line));
-    editor.register_action(cx.listener(Vim::yank_to_end_of_line));
-    editor.register_action(cx.listener(Vim::toggle_comments));
-    editor.register_action(cx.listener(Vim::paste));
+    editor
+        .register_action(cx.listener(Vim::insert_after))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::insert_before))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::insert_first_non_whitespace))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::insert_end_of_line))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::insert_line_above))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::insert_line_below))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::insert_at_previous))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::change_case))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::convert_to_upper_case))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::convert_to_lower_case))
+        .detach();
+    editor.register_action(cx.listener(Vim::yank_line)).detach();
+    editor
+        .register_action(cx.listener(Vim::yank_to_end_of_line))
+        .detach();
+    editor
+        .register_action(cx.listener(Vim::toggle_comments))
+        .detach();
+    editor.register_action(cx.listener(Vim::paste)).detach();
 
     editor.register_action(cx.listener(|vim, _: &DeleteLeft, cx| {
         vim.record_current_action(cx);

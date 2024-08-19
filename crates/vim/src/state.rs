@@ -3,10 +3,10 @@ use std::{fmt::Display, ops::Range, sync::Arc};
 use crate::normal::repeat::Replayer;
 use crate::surrounds::SurroundsType;
 use crate::{motion::Motion, object::Object};
-use crate::{UseSystemClipboard, VimSettings};
+use crate::{UseSystemClipboard, Vim, VimSettings};
 use collections::HashMap;
 use editor::{Anchor, ClipboardSelection, Editor};
-use gpui::{Action, ClipboardItem, Global};
+use gpui::{Action, ClipboardItem, EntityId, Global, View};
 use language::Point;
 use serde::{Deserialize, Serialize};
 use settings::Settings;
@@ -153,6 +153,8 @@ pub struct VimGlobals {
     pub last_yank: Option<SharedString>,
     pub registers: HashMap<char, Register>,
     pub recordings: HashMap<char, Vec<ReplayableAction>>,
+
+    pub instances: HashMap<EntityId, View<Vim>>,
 }
 impl Global for VimGlobals {}
 
